@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import { claimShift, fetchShifts } from "@/lib/mock-api";
 import type { Shift } from "@/lib/types";
 
@@ -70,38 +74,38 @@ export default function BoardPage() {
           <Link href="/" className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
             Home
           </Link>
-          <button
+          <Button
             type="button"
             onClick={() => {
               logout();
               router.push("/login");
             }}
-            className="rounded-full bg-primary px-4 py-2 text-sm text-primary-foreground"
+            className="rounded-full px-4 py-2 text-sm"
           >
             Log Out
-          </button>
+          </Button>
         </div>
       </header>
 
       <section className="mb-6 grid gap-4 rounded-xl border border-border bg-card p-5 md:grid-cols-3">
         <label className="space-y-2">
-          <span className="text-sm font-medium">Filter by role</span>
-          <select className="w-full rounded-lg border border-input bg-background px-3 py-2" value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+          <Label className="text-sm font-medium">Filter by role</Label>
+          <Select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
             {roles.map((role) => (
               <option value={role} key={role}>
                 {role === "all" ? "All roles" : role}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         <label className="space-y-2">
-          <span className="text-sm font-medium">Filter by date</span>
-          <input type="date" className="w-full rounded-lg border border-input bg-background px-3 py-2" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
+          <Label className="text-sm font-medium">Filter by date</Label>
+          <Input type="date" className="rounded-lg bg-background px-3 py-2" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
         </label>
         <div className="flex items-end">
-          <button type="button" onClick={() => setDateFilter("")} className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
+          <Button type="button" variant="outline" onClick={() => setDateFilter("")} className="rounded-full px-4 py-2 text-sm">
             Clear Date
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -162,9 +166,9 @@ function ShiftCard({
         {alreadyClaimed ? (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm font-medium">{claimedByCurrentUser ? "Claimed by you" : "Already claimed"}</p>
         ) : (
-          <button type="button" onClick={onClaim} disabled={busy} className="w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-70">
+          <Button type="button" onClick={onClaim} disabled={busy} className="h-10 w-full rounded-full px-4 py-2.5 text-sm font-semibold disabled:opacity-70">
             {busy ? "Claiming..." : "Claim Shift"}
-          </button>
+          </Button>
         )}
         {justClaimed ? <p className="mt-2 text-sm text-accent-foreground">Shift claimed successfully.</p> : null}
       </div>

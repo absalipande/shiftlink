@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const professionalSchema = z.object({
   userType: z.literal("professional"),
@@ -168,17 +171,15 @@ export default function SignupPage() {
                       id="fullName"
                       error={"fullName" in errors ? errors.fullName?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="fullName"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="Amiel Salipande"
                         {...form.register("fullName")}
                       />
                     </Field>
                     <Field label="Email" id="email" error={errors.email?.message}>
-                      <input
+                      <Input
                         id="email"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="name@email.com"
                         {...form.register("email")}
                       />
@@ -188,9 +189,8 @@ export default function SignupPage() {
                       id="role"
                       error={"role" in errors ? errors.role?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="role"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="RN, LPN, CNA..."
                         {...form.register("role")}
                       />
@@ -200,9 +200,8 @@ export default function SignupPage() {
                       id="licenseState"
                       error={"licenseState" in errors ? errors.licenseState?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="licenseState"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="CA, NY, TX..."
                         {...form.register("licenseState")}
                       />
@@ -215,17 +214,15 @@ export default function SignupPage() {
                       id="facilityName"
                       error={"facilityName" in errors ? errors.facilityName?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="facilityName"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="North Harbor Medical"
                         {...form.register("facilityName")}
                       />
                     </Field>
                     <Field label="Work Email" id="email" error={errors.email?.message}>
-                      <input
+                      <Input
                         id="email"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="ops@facility.com"
                         {...form.register("email")}
                       />
@@ -235,9 +232,8 @@ export default function SignupPage() {
                       id="contactName"
                       error={"contactName" in errors ? errors.contactName?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="contactName"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="Lena Carter"
                         {...form.register("contactName")}
                       />
@@ -247,9 +243,8 @@ export default function SignupPage() {
                       id="city"
                       error={"city" in errors ? errors.city?.message : undefined}
                     >
-                      <input
+                      <Input
                         id="city"
-                        className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                         placeholder="San Francisco"
                         {...form.register("city")}
                       />
@@ -258,12 +253,12 @@ export default function SignupPage() {
                 )}
               </div>
 
-              <button
+              <Button
                 type="submit"
-                className="mt-6 h-11 w-full rounded-full bg-primary px-4 text-[0.88rem] font-medium text-primary-foreground transition hover:opacity-90"
+                className="mt-6 h-11 w-full rounded-full text-[0.88rem] font-medium"
               >
                 Create Account
-              </button>
+              </Button>
             </form>
 
             {submitted && (
@@ -295,9 +290,7 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="text-[0.82rem] font-medium text-foreground/85">
-        {label}
-      </label>
+      <Label htmlFor={id}>{label}</Label>
       {children}
       {error ? <p className="text-[0.78rem] text-red-600">{error}</p> : null}
     </div>

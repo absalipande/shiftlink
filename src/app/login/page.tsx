@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useAuth } from "@/components/auth-provider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
   email: z.email(),
@@ -100,12 +103,9 @@ export default function LoginPage() {
 
             <div className="mt-6 space-y-4">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-[0.82rem] font-medium text-foreground/85">
-                  Email
-                </label>
-                <input
+                <Label htmlFor="email">Email</Label>
+                <Input
                   id="email"
-                  className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                   placeholder="pro@shiftlink.com"
                   {...form.register("email")}
                 />
@@ -115,13 +115,10 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password" className="text-[0.82rem] font-medium text-foreground/85">
-                  Password
-                </label>
-                <input
+                <Label htmlFor="password">Password</Label>
+                <Input
                   id="password"
                   type="password"
-                  className="h-11 w-full rounded-xl border border-input bg-background/70 px-3 text-[0.92rem] outline-none transition placeholder:text-muted-foreground/60 focus:border-primary focus:ring-4 focus:ring-primary/10"
                   placeholder="Enter demo password"
                   {...form.register("password")}
                 />
@@ -137,12 +134,12 @@ export default function LoginPage() {
               </p>
             )}
 
-            <button
+            <Button
               type="submit"
-              className="mt-6 h-11 w-full rounded-full bg-primary px-4 text-[0.88rem] font-medium text-primary-foreground transition hover:opacity-90"
+              className="mt-6 h-11 w-full rounded-full text-[0.88rem] font-medium"
             >
               Sign In
-            </button>
+            </Button>
           </form>
         </section>
       </div>
