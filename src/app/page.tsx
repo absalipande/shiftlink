@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 
@@ -33,11 +35,6 @@ export default function Home() {
     <main className="mx-auto w-full max-w-6xl px-5 py-5 md:px-8 md:py-7">
       <header className="mb-9 flex items-center justify-between">
         <p className="text-lg font-semibold tracking-[-0.03em] md:text-[1.55rem]">ShiftLink</p>
-        <nav className="hidden items-center gap-7 text-[0.82rem] text-muted-foreground md:flex">
-          <a href="#professionals" className="hover:text-foreground">Professionals</a>
-          <a href="#facilities" className="hover:text-foreground">Facilities</a>
-          <a href="#shift-board" className="hover:text-foreground">Shift Board</a>
-        </nav>
         <div className="flex items-center gap-2 text-[0.82rem] md:gap-3">
           <Link href="/login" className="rounded-full border border-border px-4 py-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground">
             Log In
@@ -74,7 +71,7 @@ export default function Home() {
                 <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">Open Shift</p>
                 <h3 className="mt-2 text-[1.35rem] leading-tight tracking-[-0.035em]">RN · North Harbor Medical</h3>
               </div>
-              <span className="rounded-full bg-secondary px-3 py-1 text-[0.7rem] font-medium text-muted-foreground">Available</span>
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-[0.7rem] font-medium text-primary">Available</span>
             </div>
             <div className="mt-5 flex items-end justify-between gap-4 border-t border-border pt-4">
               <div>
@@ -128,7 +125,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-5 grid gap-4 md:grid-cols-2">
+      <section className="mt-6 grid gap-4 md:grid-cols-2">
         <UserPathCard
           id="professionals"
           label="For Professionals"
@@ -150,9 +147,9 @@ export default function Home() {
         />
       </section>
 
-      <section id="shift-board" className="mt-8 px-0 py-2">
+      <section id="shift-board" className="mt-10 px-0 pb-8">
         <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-muted-foreground">Shift Board Preview</p>
-        <h2 className="mt-2 max-w-2xl text-[1.9rem] leading-tight tracking-[-0.045em] md:text-[2.45rem]">Available shifts, clearly presented.</h2>
+        <h2 className="mt-2 max-w-2xl text-[1.85rem] leading-tight tracking-[-0.045em] md:text-[2.2rem]">Available shifts, clearly presented.</h2>
         <p className="mt-2 max-w-3xl text-[0.95rem] leading-7 text-muted-foreground">
           Professionals can browse open shifts by role, date, time, facility, and rate before claiming.
         </p>
@@ -194,7 +191,7 @@ function UserPathCard({
   primary?: boolean;
 }) {
   return (
-    <article id={id} className="flex h-full min-h-[275px] flex-col rounded-2xl border border-border bg-card/75 p-5 md:p-6">
+    <article id={id} className="flex h-full min-h-[255px] flex-col rounded-2xl border border-border bg-card/75 p-5 md:p-6">
       <p className="text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-muted-foreground">{label}</p>
       <h3 className="mt-2 max-w-[26rem] text-[1.75rem] leading-[1.03] tracking-[-0.05em] md:text-[2.05rem]">{title}</h3>
       <p className="mt-3 max-w-[30rem] text-[0.92rem] leading-6 text-muted-foreground">{description}</p>
