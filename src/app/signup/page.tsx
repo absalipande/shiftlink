@@ -2,9 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAuth } from "@/components/auth-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,8 +32,11 @@ const signupSchema = z.discriminatedUnion("userType", [professionalSchema, facil
 type SignupValues = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [submitted, setSubmitted] = useState<SignupValues | null>(null);
   const [userType, setUserType] = useState<"professional" | "facility">("professional");
+  const isLocked = Boolean(submitted);
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -54,6 +59,7 @@ export default function SignupPage() {
   const onSubmit = (values: SignupValues) => setSubmitted(values);
 
   const switchType = (nextType: "professional" | "facility") => {
+    if (isLocked) return;
     setUserType(nextType);
     form.reset(
       nextType === "professional"
@@ -61,6 +67,19 @@ export default function SignupPage() {
         : { userType: "facility", facilityName: "", email: "", contactName: "", city: "" },
     );
     setSubmitted(null);
+  };
+
+  const continueToWorkspace = (type: "professional" | "facility") => {
+    const credentials =
+      type === "professional"
+        ? { email: "pro@shiftlink.com", password: "ShiftLink123!" }
+        : { email: "facility@shiftlink.com", password: "ShiftLink123!" };
+    const result = login(credentials.email, credentials.password);
+    if (result.ok) {
+      router.push(type === "professional" ? "/board" : "/dashboard/facility");
+    } else {
+      router.push("/login");
+    }
   };
 
   return (
@@ -121,22 +140,24 @@ export default function SignupPage() {
               <button
                 type="button"
                 onClick={() => switchType("professional")}
+                disabled={isLocked}
                 className={`rounded-full px-4 py-2 text-[0.82rem] font-medium transition ${
                   userType === "professional"
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                } ${isLocked ? "cursor-not-allowed opacity-60" : ""}`}
               >
                 Professional
               </button>
               <button
                 type="button"
                 onClick={() => switchType("facility")}
+                disabled={isLocked}
                 className={`rounded-full px-4 py-2 text-[0.82rem] font-medium transition ${
                   userType === "facility"
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground"
-                }`}
+                } ${isLocked ? "cursor-not-allowed opacity-60" : ""}`}
               >
                 Facility
               </button>
@@ -173,6 +194,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="fullName"
+                        disabled={isLocked}
                         placeholder="Amiel Salipande"
                         {...form.register("fullName")}
                       />
@@ -180,6 +202,7 @@ export default function SignupPage() {
                     <Field label="Email" id="email" error={errors.email?.message}>
                       <Input
                         id="email"
+                        disabled={isLocked}
                         placeholder="name@email.com"
                         {...form.register("email")}
                       />
@@ -191,6 +214,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="role"
+                        disabled={isLocked}
                         placeholder="RN, LPN, CNA..."
                         {...form.register("role")}
                       />
@@ -202,6 +226,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="licenseState"
+                        disabled={isLocked}
                         placeholder="CA, NY, TX..."
                         {...form.register("licenseState")}
                       />
@@ -216,6 +241,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="facilityName"
+                        disabled={isLocked}
                         placeholder="North Harbor Medical"
                         {...form.register("facilityName")}
                       />
@@ -223,6 +249,7 @@ export default function SignupPage() {
                     <Field label="Work Email" id="email" error={errors.email?.message}>
                       <Input
                         id="email"
+                        disabled={isLocked}
                         placeholder="ops@facility.com"
                         {...form.register("email")}
                       />
@@ -234,6 +261,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="contactName"
+                        disabled={isLocked}
                         placeholder="Lena Carter"
                         {...form.register("contactName")}
                       />
@@ -245,6 +273,7 @@ export default function SignupPage() {
                     >
                       <Input
                         id="city"
+                        disabled={isLocked}
                         placeholder="San Francisco"
                         {...form.register("city")}
                       />
@@ -255,19 +284,53 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
+                disabled={isLocked}
                 className="mt-6 h-11 w-full rounded-full text-[0.88rem] font-medium"
               >
-                Create Account
+                {isLocked ? "Account Created" : "Create Account"}
               </Button>
             </form>
 
             {submitted && (
-              <section className="mt-4 rounded-2xl border border-primary/15 bg-primary/10 p-4 text-[0.84rem]">
-                <p className="font-semibold text-primary">Mock submission completed.</p>
-                <p className="mt-1 leading-6 text-muted-foreground">
-                  Account type: {submitted.userType}. Your data has been captured locally for demo
-                  purposes.
+              <section className="mt-4 rounded-2xl border border-primary/20 bg-primary/10 p-4 text-[0.84rem]">
+                <p className="font-semibold text-primary">
+                  {submitted.userType === "professional"
+                    ? "Professional account created."
+                    : "Facility account created."}
                 </p>
+                <p className="mt-1 leading-6 text-muted-foreground">
+                  {submitted.userType === "professional"
+                    ? "Your profile is ready. You can now browse and claim available shifts."
+                    : "Your workspace is ready. You can now review coverage requests and posting tools."}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => continueToWorkspace(submitted.userType)}
+                    className="rounded-full bg-primary px-4 py-2 text-[0.8rem] font-medium text-primary-foreground"
+                  >
+                    {submitted.userType === "professional"
+                      ? "Go to Shift Board"
+                      : "Go to Facility Dashboard"}
+                  </button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      const nextType = submitted.userType;
+                      setSubmitted(null);
+                      setUserType(nextType);
+                      form.reset(
+                        nextType === "professional"
+                          ? { userType: "professional", fullName: "", email: "", role: "", licenseState: "" }
+                          : { userType: "facility", facilityName: "", email: "", contactName: "", city: "" },
+                      );
+                    }}
+                    className="h-9 rounded-full px-4 text-[0.8rem] font-medium"
+                  >
+                    Create Another
+                  </Button>
+                </div>
               </section>
             )}
           </div>

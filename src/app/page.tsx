@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth-provider";
 
 const professionalPoints = ["Transparent rates", "Flexible claiming", "Claim confirmation"];
 const facilityPoints = ["Post urgent shifts", "Reach available clinicians", "Track coverage"];
@@ -12,42 +14,60 @@ const previewShifts = [
     facility: "Cedar Valley Clinic",
     date: "May 12",
     time: "7:00 AM - 3:00 PM",
-    rate: "PHP 750/hr",
+    rate: "$68/hr",
   },
   {
     role: "Care Assistant",
     facility: "Northline Care Home",
     date: "May 14",
     time: "2:00 PM - 10:00 PM",
-    rate: "PHP 520/hr",
+    rate: "$56/hr",
   },
   {
     role: "LPN",
     facility: "Harborview Medical",
     date: "May 15",
     time: "3:00 PM - 11:00 PM",
-    rate: "PHP 640/hr",
+    rate: "$64/hr",
   },
 ];
 
 export default function Home() {
+  const router = useRouter();
+  const { user, loading, logout } = useAuth();
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-6xl bg-background px-5 py-5 md:px-8 md:py-7">
       <header className="mb-9 flex items-center justify-between">
         <p className="text-lg font-semibold tracking-[-0.03em] md:text-[1.55rem]">ShiftLink</p>
         <div className="flex items-center gap-2 text-[0.82rem] md:gap-3">
-          <Link
-            href="/login"
-            className="rounded-full border border-border px-4 py-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground"
-          >
-            Log In
-          </Link>
-          <Link
-            href="/signup"
-            className="rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
-          >
-            Sign Up
-          </Link>
+          {!loading && user ? (
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                router.push("/login");
+              }}
+              className="rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
+            >
+              Log Out
+            </button>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="rounded-full border border-border px-4 py-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/signup"
+                className="rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground transition hover:opacity-90"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
@@ -98,10 +118,10 @@ export default function Home() {
             <div className="mt-5 flex items-end justify-between gap-4 border-t border-border pt-4">
               <div>
                 <p className="text-[0.78rem] text-muted-foreground">May 12 · 7:00 AM - 3:00 PM</p>
-                <p className="mt-1 text-[0.95rem] font-semibold">PHP 750/hr</p>
+                <p className="mt-1 text-[0.95rem] font-semibold">$68/hr</p>
               </div>
               <Link
-                href="/shift-board"
+                href={user ? "/board" : "/login"}
                 className="rounded-full bg-primary px-4 py-2 text-[0.78rem] font-medium text-primary-foreground"
               >
                 Claim Shift
